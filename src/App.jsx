@@ -51,6 +51,18 @@ export const App = () => {
     sortField,
     isReversed,
   });
+  const handleSortAlphabetically = () =>
+    setSortField(SORT_FIELD_ALPHABETICALLY);
+  const handleSortByLength = () => setSortField(SORT_FIELD_LENGTH);
+  const handleReverse = () => setIsReversed(prev => !prev);
+  const handleReset = () => {
+    setSortField('');
+    setIsReversed(false);
+  };
+
+  const isOriginalOrder = visibleGoods.every(
+    (item, idx) => item === goodsFromServer[idx],
+  );
 
   return (
     <div className="section content">
@@ -60,7 +72,7 @@ export const App = () => {
           className={cn('button', 'is-info', {
             'is-light': sortField !== SORT_FIELD_ALPHABETICALLY,
           })}
-          onClick={() => setSortField(SORT_FIELD_ALPHABETICALLY)}
+          onClick={handleSortAlphabetically}
         >
           Sort alphabetically
         </button>
@@ -70,7 +82,7 @@ export const App = () => {
           className={cn('button', 'is-success', {
             'is-light': sortField !== SORT_FIELD_LENGTH,
           })}
-          onClick={() => setSortField(SORT_FIELD_LENGTH)}
+          onClick={handleSortByLength}
         >
           Sort by length
         </button>
@@ -80,19 +92,16 @@ export const App = () => {
           className={cn('button', 'is-warning', {
             'is-light': !isReversed,
           })}
-          onClick={() => setIsReversed(!isReversed)}
+          onClick={handleReverse}
         >
           Reverse
         </button>
 
-        {(sortField || isReversed) && (
+        {!isOriginalOrder && (
           <button
             type="button"
             className={cn('button', 'is-danger', 'is-light')}
-            onClick={() => {
-              setSortField('');
-              setIsReversed(false);
-            }}
+            onClick={handleReset}
           >
             Reset
           </button>
